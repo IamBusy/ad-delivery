@@ -15,6 +15,7 @@ import sys
 import config
 import os
 import time
+import container
 
 
 __handler = None
@@ -46,6 +47,7 @@ def __init():
         raise Exception('Invalid driver for log')
     __handler.push_application()
     __loggers['core'] = Logger('Core')
+    container.register('logger', __loggers['core'])
 
 
 def get(channel):

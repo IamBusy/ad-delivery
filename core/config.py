@@ -12,7 +12,7 @@
 
 import toml
 import os
-import logger
+import container
 
 APP_PATH = os.path.split(os.path.split(os.path.realpath(__file__))[0])[0]
 
@@ -30,6 +30,6 @@ def get(key_str, def_val=None):
             cur = cur[key]
         return cur
     except Exception as e:
-        logger.notice("config key [%s] not found" % key_str)
+        container.resolve('logger').notice("config key [%s] not found" % key_str)
         return def_val
 
