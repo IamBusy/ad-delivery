@@ -1,0 +1,9 @@
+[db.mysql]
+# More confirgurations are available here https://orator-orm.com/docs/0.9/basic_usage.html#configuration
+user="root"
+password="root"
+host="localhost"
+port=3306
+database="materials"
+prefix=""
+log_queries=true
