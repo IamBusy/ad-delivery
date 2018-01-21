@@ -1,0 +1,6 @@
+Logbook==1.1.0
+celery==4.1.0
+toml==0.9.4
+orator==0.9.7
+requests==2.18.4
+pymongo==3.6.0
