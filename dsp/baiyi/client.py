@@ -15,7 +15,7 @@ import requests
 import json
 
 
-__global_account = {}
+_global_account = {}
 
 
 class Client:
@@ -23,7 +23,6 @@ class Client:
     __version = None
     __service = None
     __gateway = None
-    global __global_account
 
     def __init__(self, product_line, version, service):
         """
@@ -31,14 +30,15 @@ class Client:
         :param version:
         :param service:
         """
+        global _global_account
         self.__product_line = product_line
         self.__version = version
         self.__service = service
         self.__gateway = "https://api.baidu.com/json/%s/%s/%s/" % \
                          (self.__product_line, self.__version, self.__service)
-        self.__username = self.__global_account['username'] if 'username' in self.__global_account else None
-        self.__password = self.__global_account['password'] if 'password' in self.__global_account else None
-        self.__token = self.__global_account['token'] if 'token' in self.__global_account else None
+        self.__username = _global_account['username'] if 'username' in _global_account else None
+        self.__password = _global_account['password'] if 'password' in _global_account else None
+        self.__token = _global_account['token'] if 'token' in _global_account else None
 
     def _request(self, action, param=None):
         """
@@ -60,9 +60,13 @@ class Client:
         response = requests.post(
             self.__gateway + action, data=json.dumps({"header": header, "body": param}), verify=False)
         if response.status_code == 200:
-            return json.loads(response.text)
+            rtn = json.loads(response.text)
+            if 'header' in rtn and 'desc' in rtn['header'] and rtn['header']['desc'] == 'success':
+                return rtn['body']['data'], True
+            else:
+                return rtn['header'], False
         else:
-            raise Exception("NETWORK ERROR")
+            raise Exception("NETWORK ERROR", response)
 
     def set_account(self, username, password, token):
         self.__username = username
@@ -72,22 +76,27 @@ class Client:
 
 # Define global account info here before using them
 def set_account(username, password, token):
-    global __global_account
-    __global_account['username'] = username
-    __global_account['password'] = password
-    __global_account['token'] = token
+    global _global_account
+    _global_account['username'] = username
+    _global_account['password'] = password
+    _global_account['token'] = token
+
+
+def get_account():
+    global _global_account
+    return _global_account
 
 
 def set_username(username):
-    global __global_account
-    __global_account['username'] = username
+    global _global_account
+    _global_account['username'] = username
 
 
 def set_password(password):
-    global __global_account
-    __global_account['password'] = password
+    global _global_account
+    _global_account['password'] = password
 
 
 def set_token(token):
-    global __global_account
-    __global_account['token'] = token
+    global _global_account
+    _global_account['token'] = token
