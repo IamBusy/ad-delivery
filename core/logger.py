@@ -9,13 +9,13 @@
 @file: logger.py
 @time: 15/01/2018 1:19 PM
 """
-
-from logbook import Logger, StreamHandler, FileHandler
 import sys
 import config
 import os
 import time
+from logbook import Logger, StreamHandler, FileHandler
 import container
+import functools
 
 
 __handler = None
@@ -50,7 +50,32 @@ def __init():
     container.register('logger', __loggers['core'])
 
 
+def log(*args):
+    if not callable(args[0]):
+        def decorator(func):
+            @functools.wraps(func)
+            def wrapper(*arg, **kwa):
+                get(args[0]).info("Start call function [%s] with %s, %s" % (func.__name__, args, kwa))
+                func(*arg, **kwa)
+                get(args[0]).info("End call function [%s]" % func.__name__)
+            return wrapper
+        return decorator
+    else:
+        func = args[0]
+
+        @functools.wraps(func)
+        def wrapper(*arg, **kwa):
+            info("Start call function [%s] with %s, %s" % (func.__name__, args, kwa))
+            func(*arg, **kwa)
+            info("End call function [%s]" % func.__name__)
+        return wrapper
+
+
 def get(channel):
+    """
+    :param channel:
+    :return: Logger
+    """
     if channel not in __loggers:
         __loggers[channel] = Logger(channel)
     return __loggers[channel]

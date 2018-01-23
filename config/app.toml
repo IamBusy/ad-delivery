@@ -7,7 +7,7 @@ backend="redis://localhost:6379/1"
 type="single"
 
 # Available settings: debug/info/notice/warning/error/critical
-level="notice"
+level="debug"
 
 # Available settings: file/stdout/stderr
 driver="stderr"
