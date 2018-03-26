@@ -103,5 +103,7 @@ ENV/
 .idea
 *.pyc
 
-!config/*.example.toml
-config/*.toml
+!*.example.toml
+!Gopkg.toml
+*.toml
+vendor

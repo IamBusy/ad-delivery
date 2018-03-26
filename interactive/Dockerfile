@@ -1,7 +1,7 @@
 FROM williamwxl/go-dep AS build-env
 ADD . /go/src/app
 WORKDIR /go/src/app
-RUN go build -o target main.go
+RUN dep ensure && go build -o target main.go
 
 FROM alpine:3.6
 RUN apk add -U tzdata && \

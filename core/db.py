@@ -12,6 +12,7 @@
 
 from orator import DatabaseManager
 from pymongo import MongoClient
+import etcd
 
 # TODO Reuse connections
 __clients = {}
@@ -36,3 +37,7 @@ def get_mongo_client(config):
                        host=config['host'],
                        port=config['port'])
     return conn.config['db']
+
+
+def get_etcd_client(config):
+    return etcd.Client(host=config['host'], port=config['port'])
