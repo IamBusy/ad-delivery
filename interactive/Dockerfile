@@ -1,4 +1,4 @@
-FROM williamwxl/go-dep AS build-env
+FROM williamwxl/go-dep:1.9.0-alpine AS build-env
 ADD . /go/src/app
 WORKDIR /go/src/app
 RUN dep ensure && go build -o target main.go
